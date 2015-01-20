@@ -54,6 +54,6 @@ cds_range=${tfa%.*}_cds.txt
 star_idx_dir=${work_dir}/StarIndex/gencodev18/
 adapter=TCGTATGCCGTCTTCTGCTTG
 min_fplen=25
-max_fplen=36
-offset=offset.txt
-${ribomap_dir}/scripts/run_ribomap.sh --rnaseq_fq ${rnaseq_fq} --riboseq_fq ${riboseq_fq} --transcript_fa ${transcript_fa} --contaminant_fa ${contaminant_fa} --cds_range ${cds_range} --work_dir ${work_dir} --star_idx_dir ${star_idx_dir} --offset ${offset} --adapter ${adapter} --min_fplen ${min_fplen} --max_fplen ${max_fplen} --force true
+max_fplen=33
+offset=12 #offset.txt
+${ribomap_dir}scripts/run_ribomap.sh --rnaseq_fq ${rnaseq_fq} --riboseq_fq ${riboseq_fq} --transcript_fa ${transcript_fa} --contaminant_fa ${contaminant_fa} --cds_range ${cds_range} --work_dir ${work_dir} --star_idx_dir ${star_idx_dir} --offset ${offset} --adapter ${adapter} --min_fplen ${min_fplen} --max_fplen ${max_fplen} --useSecondary true #--force true
