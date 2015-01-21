@@ -6,6 +6,11 @@ ref_dir=${work_dir}ref/
 #=============================
 # step 1: download sra & refs
 #=============================
+echo "downloading Hela cell reads..."
+riboseq_url=ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM546nnn/GSM546920/suppl/GSM546920_filtered_sequence.txt.gz
+rnaseq_url=ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM546nnn/GSM546921/suppl/GSM546921_filtered_sequence.txt.gz
+# wget -P ${fasta_dir} -N ${rnaseq_url}
+# wget -P ${fasta_dir} -N ${riboseq_url}
 echo "downloading transcriptome reference data..."
 gtf_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_18/gencode.v18.annotation.gtf.gz
 tfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_18/gencode.v18.pc_transcripts.fa.gz
@@ -15,11 +20,6 @@ pfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_18/gencode.v18.
 # wget -P ${ref_dir} -N ${pfa_url}
 # echo "unzipping data..."
 # gunzip -f ${ref_dir}*.gz
-# echo "downloading Hela cell reads..."
-riboseq_url=ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM546nnn/GSM546920/suppl/GSM546920_filtered_sequence.txt.gz
-rnaseq_url=ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM546nnn/GSM546921/suppl/GSM546921_filtered_sequence.txt.gz
-# wget -P ${fasta_dir} -N ${rnaseq_url}
-# wget -P ${fasta_dir} -N ${riboseq_url}
 #=============================
 # step 2: process reference
 # build cds range file
@@ -54,6 +54,6 @@ cds_range=${tfa%.*}_cds.txt
 star_idx_dir=${work_dir}/StarIndex/gencodev18/
 adapter=TCGTATGCCGTCTTCTGCTTG
 min_fplen=25
-max_fplen=33
-offset=12 #offset.txt
-${ribomap_dir}scripts/run_ribomap.sh --rnaseq_fq ${rnaseq_fq} --riboseq_fq ${riboseq_fq} --transcript_fa ${transcript_fa} --contaminant_fa ${contaminant_fa} --cds_range ${cds_range} --work_dir ${work_dir} --star_idx_dir ${star_idx_dir} --offset ${offset} --adapter ${adapter} --min_fplen ${min_fplen} --max_fplen ${max_fplen} --useSecondary true #--force true
+max_fplen=36
+offset=offset.txt
+${ribomap_dir}scripts/run_ribomap.sh --rnaseq_fq ${rnaseq_fq} --riboseq_fq ${riboseq_fq} --transcript_fa ${transcript_fa} --contaminant_fa ${contaminant_fa} --cds_range ${cds_range} --work_dir ${work_dir} --star_idx_dir ${star_idx_dir} --offset ${offset} --adapter ${adapter} --min_fplen ${min_fplen} --max_fplen ${max_fplen} #--force true
