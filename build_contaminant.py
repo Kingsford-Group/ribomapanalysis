@@ -2,22 +2,20 @@
 import sys
 from Bio import SeqIO
 
-if len(sys.argv)!=2:
-    print "Usage: python build_contaminant.py work_dirc"
+if len(sys.argv)!=5:
+    print "Usage: python build_contaminant.py rrna_fa trna_fa trna_species ofile"
     exit(1)
 
-dirc = sys.argv[1]
-rrna_fa = dirc+"/Homo_sapiens.GRCh38.ncrna.fa"
-trna_fa = dirc+"/eukaryotic-tRNAs.fa"
-out_fa = dirc+"/human_contaminant.fa"
-
+rrna_fa = sys.argv[1]
+trna_fa = sys.argv[2]
+trna_specie = sys.argv[3]
+out_fa = sys.argv[4]
 
 ofile = open(out_fa, 'w')
-
 i = 0
 trna_file = open(trna_fa)
 for rec in SeqIO.parse(trna_file, "fasta"):
-    if rec.id.startswith("Homo_sapiens"):
+    if rec.id.startswith(trna_specie):
         SeqIO.write(rec, ofile, "fasta")
         i += 1
 trna_file.close()
