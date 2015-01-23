@@ -16,37 +16,37 @@ mkdir -p ${ref_dir}
 #=============================
 echo "downloading sra..."
 # ES cell feeder-free, w/ LIF 60 s CYH (100 ug/ml) mrna_mesc_yeslif Illumina GAII
-# wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084812/SRR315595/SRR315595.sra
-# wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084812/SRR315596/SRR315596.sra
-# # # ES cell feeder-free, w/ LIF 60 s CYH (100 ug/ml) ribo_mesc_chx Illumina GAII
-# # wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084815/SRR315601/SRR315601.sra
-# # wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084815/SRR315602/SRR315602.sra
-# # ES cell feeder-free, w/ LIF 60 s CYH (100 ug/ml) ribo_mesc_yeslif Illumina GAII
-# wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084824/SRR315624/SRR315624.sra
-# wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084824/SRR315625/SRR315625.sra
-# wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084824/SRR315626/SRR315626.sra
+wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084812/SRR315595/SRR315595.sra
+wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084812/SRR315596/SRR315596.sra
+# # ES cell feeder-free, w/ LIF 60 s CYH (100 ug/ml) ribo_mesc_chx Illumina GAII
+# wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084815/SRR315601/SRR315601.sra
+# wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084815/SRR315602/SRR315602.sra
+# ES cell feeder-free, w/ LIF 60 s CYH (100 ug/ml) ribo_mesc_yeslif Illumina GAII
+wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084824/SRR315624/SRR315624.sra
+wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084824/SRR315625/SRR315625.sra
+wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084824/SRR315626/SRR315626.sra
 echo "downloading references..."
 gtf_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M4/gencode.vM4.annotation.gtf.gz
 tfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M4/gencode.vM4.pc_transcripts.fa.gz
 pfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M4/gencode.vM4.pc_translations.fa.gz
-# wget -P ${ref_dir} -N ${gtf_url}
-# wget -P ${ref_dir} -N ${tfa_url}
-# wget -P ${ref_dir} -N ${pfa_url}
-# echo "unzipping data..."
-# gunzip -f ${ref_dir}*.gz
-# #==============================
-# # step 2: convert sra to fastq
-# #==============================
-# echo "converting sra to fastq..."
-# for file in ${sra_dir}*.sra; do
-#     fastq-dump $file -O ${fasta_dir}
-# done
-# #==============================
-# # step 3: zip fastq
-# #==============================
-# echo "zipping fastq files..."
-# gzip -f -c ${fasta_dir}SRR315595.fastq ${fasta_dir}SRR315596.fastq > ${fasta_dir}mrna_mesc_yeslif.fq.gz
-# gzip -f -c ${fasta_dir}SRR315624.fastq ${fasta_dir}SRR315625.fastq ${fasta_dir}SRR315626.fastq > ${fasta_dir}ribo_mesc_yeslif.fq.gz
+wget -P ${ref_dir} -N ${gtf_url}
+wget -P ${ref_dir} -N ${tfa_url}
+wget -P ${ref_dir} -N ${pfa_url}
+echo "unzipping data..."
+gunzip -f ${ref_dir}*.gz
+#==============================
+# step 2: convert sra to fastq
+#==============================
+echo "converting sra to fastq..."
+for file in ${sra_dir}*.sra; do
+    fastq-dump $file -O ${fasta_dir}
+done
+#==============================
+# step 3: zip fastq
+#==============================
+echo "zipping fastq files..."
+gzip -f -c ${fasta_dir}SRR315595.fastq ${fasta_dir}SRR315596.fastq > ${fasta_dir}mrna_mesc_yeslif.fq.gz
+gzip -f -c ${fasta_dir}SRR315624.fastq ${fasta_dir}SRR315625.fastq ${fasta_dir}SRR315626.fastq > ${fasta_dir}ribo_mesc_yeslif.fq.gz
 #=============================
 # step 4: process reference
 # build cds range file
@@ -58,23 +58,23 @@ tfa=${ref_dir}${tfa_url##*/}
 tfa=${tfa%.gz}
 pfa=${ref_dir}${pfa_url##*/}
 pfa=${pfa%.gz}
-# python filter_gencode_transcript.py ${gtf} ${tfa} ${pfa}
+python filter_gencode_transcript.py ${gtf} ${tfa} ${pfa}
 #====================================
 # step 5: build contaminant sequence
 #====================================
 nc_url=ftp://ftp.ensembl.org/pub/release-78/fasta/mus_musculus/ncrna/Mus_musculus.GRCm38.ncrna.fa.gz
 trna_url=http://gtrnadb.ucsc.edu/download/tRNAs/eukaryotic-tRNAs.fa.gz
-# echo "downloading ncRNA from Ensembl..."
-# wget -P ${ref_dir} -N ${nc_url}
-# echo "downloading tRNA from gtrnadb..."
-# wget -P ${ref_dir} -N ${trna_url}
-# gunzip -f ${ref_dir}*.gz
-# echo "merging rRNA and tRNA..."
+echo "downloading ncRNA from Ensembl..."
+wget -P ${ref_dir} -N ${nc_url}
+echo "downloading tRNA from gtrnadb..."
+wget -P ${ref_dir} -N ${trna_url}
+gunzip -f ${ref_dir}*.gz
+echo "merging rRNA and tRNA..."
 rrna_fa=${ref_dir}${nc_url##*/}
 rrna_fa=${rrna_fa%.gz}
 trna_fa=${ref_dir}${trna_url##*/}
 trna_fa=${trna_fa%.gz}
-#python build_contaminant.py ${rrna_fa} ${trna_fa} Mus_musculus ${ref_dir}mouse_contaminant.fa
+python build_contaminant.py ${rrna_fa} ${trna_fa} Mus_musculus ${ref_dir}mouse_contaminant.fa
 echo "done preparing data for ribomap"
 #=============================
 # step 6: run ribomap
