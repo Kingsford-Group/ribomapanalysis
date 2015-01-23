@@ -1,6 +1,6 @@
 #!/bin/bash
 hela_dir=/home/hw1/scratch/scratch2/ribomap-playground/hela/
-work_dir=${hela_dir}synthetic_data_20m/
+work_dir=${hela_dir}synthetic_data/
 ribomap_dir=/home/hw1/scratch/scratch2/software_testing/ribomap/
 rnaseq_fq=${work_dir}synth_rnaseq.fq.gz
 riboseq_fq_prefix=${work_dir}synth_riboseq_
