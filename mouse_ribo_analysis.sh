@@ -5,6 +5,20 @@ data_dir=${work_dir}data/
 sra_dir=${data_dir}sra/
 fasta_dir=${data_dir}fasta/
 ref_dir=${work_dir}ref/
+get_data=true
+#=============================
+# urls
+#=============================
+gtf_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M4/gencode.vM4.annotation.gtf.gz
+tfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M4/gencode.vM4.pc_transcripts.fa.gz
+pfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M4/gencode.vM4.pc_translations.fa.gz
+gtf=${ref_dir}${gtf_url##*/}
+gtf=${gtf%.gz}
+tfa=${ref_dir}${tfa_url##*/}
+tfa=${tfa%.gz}
+pfa=${ref_dir}${pfa_url##*/}
+pfa=${pfa%.gz}
+if [ "${get_data}" = true ]; then
 #=============================
 # make directories
 #=============================
@@ -26,9 +40,6 @@ wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByE
 wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084824/SRR315625/SRR315625.sra
 wget -P ${sra_dir} -N ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX%2FSRX084%2FSRX084824/SRR315626/SRR315626.sra
 echo "downloading references..."
-gtf_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M4/gencode.vM4.annotation.gtf.gz
-tfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M4/gencode.vM4.pc_transcripts.fa.gz
-pfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M4/gencode.vM4.pc_translations.fa.gz
 wget -P ${ref_dir} -N ${gtf_url}
 wget -P ${ref_dir} -N ${tfa_url}
 wget -P ${ref_dir} -N ${pfa_url}
@@ -52,12 +63,6 @@ gzip -f -c ${fasta_dir}SRR315624.fastq ${fasta_dir}SRR315625.fastq ${fasta_dir}S
 # build cds range file
 #=============================
 echo "filtering transcripts...."
-gtf=${ref_dir}${gtf_url##*/}
-gtf=${gtf%.gz}
-tfa=${ref_dir}${tfa_url##*/}
-tfa=${tfa%.gz}
-pfa=${ref_dir}${pfa_url##*/}
-pfa=${pfa%.gz}
 python filter_gencode_transcript.py ${gtf} ${tfa} ${pfa}
 #====================================
 # step 5: build contaminant sequence
@@ -76,6 +81,7 @@ trna_fa=${ref_dir}${trna_url##*/}
 trna_fa=${trna_fa%.gz}
 python build_contaminant.py ${rrna_fa} ${trna_fa} Mus_musculus ${ref_dir}mouse_contaminant.fa
 echo "done preparing data for ribomap"
+fi
 #=============================
 # step 6: run ribomap
 #=============================

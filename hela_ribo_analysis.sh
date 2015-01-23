@@ -3,18 +3,29 @@ work_dir=/home/hw1/scratch/scratch2/ribomap-playground/hela/
 ribomap_dir=/home/hw1/scratch/scratch2/software_testing/ribomap/
 fasta_dir=${work_dir}data/fasta/
 ref_dir=${work_dir}ref/
+get_data=true
+#=============================
+# urls
+#=============================
+riboseq_url=ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM546nnn/GSM546920/suppl/GSM546920_filtered_sequence.txt.gz
+rnaseq_url=ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM546nnn/GSM546921/suppl/GSM546921_filtered_sequence.txt.gz
+gtf_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_18/gencode.v18.annotation.gtf.gz
+tfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_18/gencode.v18.pc_transcripts.fa.gz
+pfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_18/gencode.v18.pc_translations.fa.gz
+gtf=${ref_dir}${gtf_url##*/}
+gtf=${gtf%.gz}
+tfa=${ref_dir}${tfa_url##*/}
+tfa=${tfa%.gz}
+pfa=${ref_dir}${pfa_url##*/}
+pfa=${pfa%.gz}
+if [ "${get_data}" = true ]; then
 #=============================
 # step 1: download sra & refs
 #=============================
 echo "downloading Hela cell reads..."
-riboseq_url=ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM546nnn/GSM546920/suppl/GSM546920_filtered_sequence.txt.gz
-rnaseq_url=ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM546nnn/GSM546921/suppl/GSM546921_filtered_sequence.txt.gz
 wget -P ${fasta_dir} -N ${rnaseq_url}
 wget -P ${fasta_dir} -N ${riboseq_url}
 echo "downloading transcriptome reference data..."
-gtf_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_18/gencode.v18.annotation.gtf.gz
-tfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_18/gencode.v18.pc_transcripts.fa.gz
-pfa_url=ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_18/gencode.v18.pc_translations.fa.gz
 wget -P ${ref_dir} -N ${gtf_url}
 wget -P ${ref_dir} -N ${tfa_url}
 wget -P ${ref_dir} -N ${pfa_url}
@@ -25,12 +36,6 @@ gunzip -f ${ref_dir}*.gz
 # build cds range file
 #=============================
 echo "filtering transcripts...."
-gtf=${ref_dir}${gtf_url##*/}
-gtf=${gtf%.gz}
-tfa=${ref_dir}${tfa_url##*/}
-tfa=${tfa%.gz}
-pfa=${ref_dir}${pfa_url##*/}
-pfa=${pfa%.gz}
 python filter_gencode_transcript.py ${gtf} ${tfa} ${pfa}
 #====================================
 # step 3: build contaminant sequence
@@ -49,6 +54,7 @@ trna_fa=${ref_dir}${trna_url##*/}
 trna_fa=${trna_fa%.gz}
 python build_contaminant.py ${rrna_fa} ${trna_fa} Homo_sapiens ${ref_dir}human_contaminant.fa
 echo "done preparing data for ribomap"
+fi
 #=============================
 # step 4: run ribomap
 #=============================
