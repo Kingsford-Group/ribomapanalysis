@@ -57,12 +57,11 @@ riboseq_fq=${fasta_dir}${riboseq_url##*/}
 transcript_fa=${tfa%.*}_filter.fa
 contaminant_fa=${ref_dir}human_contaminant.fa
 cds_range=${tfa%.*}_cds.txt
-star_idx_dir=${work_dir}/StarIndex/gencodev18/
 adapter=TCGTATGCCGTCTTCTGCTTG
 min_fplen=25
 max_fplen=36
 offset=offset.txt
-ribo_cmd="${ribomap_dir}scripts/run_ribomap.sh --rnaseq_fq ${rnaseq_fq} --riboseq_fq ${riboseq_fq} --transcript_fa ${transcript_fa} --contaminant_fa ${contaminant_fa} --cds_range ${cds_range} --adapter ${adapter} --min_fplen ${min_fplen} --max_fplen ${max_fplen} --offset ${offset} --work_dir ${work_dir} --star_idx_dir ${star_idx_dir}"
+ribo_cmd="${ribomap_dir}scripts/run_ribomap.sh --rnaseq_fq ${rnaseq_fq} --riboseq_fq ${riboseq_fq} --transcript_fa ${transcript_fa} --contaminant_fa ${contaminant_fa} --cds_range ${cds_range} --adapter ${adapter} --min_fplen ${min_fplen} --max_fplen ${max_fplen} --offset ${offset} --work_dir ${work_dir}"
 # ribomap
 ${ribo_cmd} --output_dir ${work_dir}ribomap #--force true
 # star prime
