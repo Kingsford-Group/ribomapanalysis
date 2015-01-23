@@ -35,13 +35,19 @@ pfa=${pfa%.gz}
 #====================================
 # step 3: build contaminant sequence
 #====================================
+nc_url=ftp://ftp.ensembl.org/pub/release-78/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz
+trna_url=http://gtrnadb.ucsc.edu/download/tRNAs/eukaryotic-tRNAs.fa.gz
 # echo "downloading ncRNA from Ensembl..."
-# wget -P ${ref_dir} -N ftp://ftp.ensembl.org/pub/release-78/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz
+# wget -P ${ref_dir} -N ${nc_url}
 # echo "downloading tRNA from gtrnadb..."
-# wget -P ${ref_dir} -N http://gtrnadb.ucsc.edu/download/tRNAs/eukaryotic-tRNAs.fa.gz
+# wget -P ${ref_dir} -N ${trna_url}
 # gunzip -f ${ref_dir}*.gz
 # echo "merging rRNA and tRNA..."
-# python build_contaminant.py ${ref_dir}
+rrna_fa=${ref_dir}${nc_url##*/}
+rrna_fa=${rrna_fa%.gz}
+trna_fa=${ref_dir}${trna_url##*/}
+trna_fa=${trna_fa%.gz}
+#python build_contaminant.py ${rrna_fa} ${trna_fa} Homo_sapiens ${ref_dir}human_contaminant.fa
 echo "done preparing data for ribomap"
 #=============================
 # step 4: run ribomap
@@ -56,4 +62,8 @@ adapter=TCGTATGCCGTCTTCTGCTTG
 min_fplen=25
 max_fplen=36
 offset=offset.txt
-${ribomap_dir}scripts/run_ribomap.sh --rnaseq_fq ${rnaseq_fq} --riboseq_fq ${riboseq_fq} --transcript_fa ${transcript_fa} --contaminant_fa ${contaminant_fa} --cds_range ${cds_range} --work_dir ${work_dir} --star_idx_dir ${star_idx_dir} --offset ${offset} --adapter ${adapter} --min_fplen ${min_fplen} --max_fplen ${max_fplen} #--force true
+ribo_cmd="${ribomap_dir}scripts/run_ribomap.sh --rnaseq_fq ${rnaseq_fq} --riboseq_fq ${riboseq_fq} --transcript_fa ${transcript_fa} --contaminant_fa ${contaminant_fa} --cds_range ${cds_range} --adapter ${adapter} --min_fplen ${min_fplen} --max_fplen ${max_fplen} --offset ${offset} --work_dir ${work_dir} --star_idx_dir ${star_idx_dir}"
+# ribomap
+${ribo_cmd} --output_dir ${work_dir}ribomap #--force true
+# star prime
+${ribo_cmd} --output_dir ${work_dir}star_prime --tabd_cutoff -1 --useSecondary false #--force true

@@ -62,9 +62,9 @@ pfa=${pfa%.gz}
 #====================================
 # step 5: build contaminant sequence
 #====================================
-echo "downloading ncRNA from Ensembl..."
 nc_url=ftp://ftp.ensembl.org/pub/release-78/fasta/mus_musculus/ncrna/Mus_musculus.GRCm38.ncrna.fa.gz
 trna_url=http://gtrnadb.ucsc.edu/download/tRNAs/eukaryotic-tRNAs.fa.gz
+# echo "downloading ncRNA from Ensembl..."
 # wget -P ${ref_dir} -N ${nc_url}
 # echo "downloading tRNA from gtrnadb..."
 # wget -P ${ref_dir} -N ${trna_url}
@@ -88,4 +88,8 @@ adapter=CTGTAGGCACCATCAATTCGTATGCCGTCTTCTGCTTGAA
 min_fplen=25
 max_fplen=35
 offset=offset.txt
-${ribomap_dir}scripts/run_ribomap.sh --rnaseq_fq ${rnaseq_fq} --riboseq_fq ${riboseq_fq} --transcript_fa ${transcript_fa} --contaminant_fa ${contaminant_fa} --cds_range ${cds_range} --work_dir ${work_dir} --offset ${offset} --adapter ${adapter} --min_fplen ${min_fplen} --max_fplen ${max_fplen} #--force true
+ribo_cmd="${ribomap_dir}scripts/run_ribomap.sh --rnaseq_fq ${rnaseq_fq} --riboseq_fq ${riboseq_fq} --transcript_fa ${transcript_fa} --contaminant_fa ${contaminant_fa} --cds_range ${cds_range} --adapter ${adapter} --min_fplen ${min_fplen} --max_fplen ${max_fplen} --offset ${offset} --work_dir ${work_dir}"
+# ribomap
+${ribo_cmd} --output_dir ${work_dir}ribomap
+# star prime
+${ribo_cmd} --output_dir ${work_dir}star_prime --tabd_cutoff -1 --useSecondary false
