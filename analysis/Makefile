@@ -13,3 +13,8 @@ bam_info: bam_info_extraction.o
 soft_clip_stats: bam_soft_clip.o
 	$(COMPILE.c) $(OUTPUT_OPTION) $^ $(LDFLAGS)
 	chmod u+x $@
+
+multimapper_info: genome_common_transcript_bam.o
+	$(COMPILE.c) $(OUTPUT_OPTION) $^ $(LDFLAGS)
+	chmod u+x $@
+

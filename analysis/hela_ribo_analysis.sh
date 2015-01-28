@@ -3,7 +3,7 @@ work_dir=/home/hw1/scratch/scratch2/ribomap-playground/hela/
 ribomap_dir=/home/hw1/scratch/scratch2/software_testing/ribomap/
 fasta_dir=${work_dir}data/fasta/
 ref_dir=${work_dir}ref/
-get_data=true
+get_data=false
 #=============================
 # urls
 #=============================
@@ -19,41 +19,41 @@ tfa=${tfa%.gz}
 pfa=${ref_dir}${pfa_url##*/}
 pfa=${pfa%.gz}
 if [ "${get_data}" = true ]; then
-#=============================
-# step 1: download sra & refs
-#=============================
-echo "downloading Hela cell reads..."
-wget -P ${fasta_dir} -N ${rnaseq_url}
-wget -P ${fasta_dir} -N ${riboseq_url}
-echo "downloading transcriptome reference data..."
-wget -P ${ref_dir} -N ${gtf_url}
-wget -P ${ref_dir} -N ${tfa_url}
-wget -P ${ref_dir} -N ${pfa_url}
-echo "unzipping data..."
-gunzip -f ${ref_dir}*.gz
-#=============================
-# step 2: process reference
-# build cds range file
-#=============================
-echo "filtering transcripts...."
-python filter_gencode_transcript.py ${gtf} ${tfa} ${pfa}
-#====================================
-# step 3: build contaminant sequence
-#====================================
-nc_url=ftp://ftp.ensembl.org/pub/release-78/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz
-trna_url=http://gtrnadb.ucsc.edu/download/tRNAs/eukaryotic-tRNAs.fa.gz
-echo "downloading ncRNA from Ensembl..."
-wget -P ${ref_dir} -N ${nc_url}
-echo "downloading tRNA from gtrnadb..."
-wget -P ${ref_dir} -N ${trna_url}
-gunzip -f ${ref_dir}*.gz
-echo "merging rRNA and tRNA..."
-rrna_fa=${ref_dir}${nc_url##*/}
-rrna_fa=${rrna_fa%.gz}
-trna_fa=${ref_dir}${trna_url##*/}
-trna_fa=${trna_fa%.gz}
-python build_contaminant.py ${rrna_fa} ${trna_fa} Homo_sapiens ${ref_dir}human_contaminant.fa
-echo "done preparing data for ribomap"
+    #=============================
+    # step 1: download sra & refs
+    #=============================
+    echo "downloading Hela cell reads..."
+    wget -P ${fasta_dir} -N ${rnaseq_url}
+    wget -P ${fasta_dir} -N ${riboseq_url}
+    echo "downloading transcriptome reference data..."
+    wget -P ${ref_dir} -N ${gtf_url}
+    wget -P ${ref_dir} -N ${tfa_url}
+    wget -P ${ref_dir} -N ${pfa_url}
+    echo "unzipping data..."
+    gunzip -f ${ref_dir}*.gz
+    #=============================
+    # step 2: process reference
+    # build cds range file
+    #=============================
+    echo "filtering transcripts...."
+    python filter_gencode_transcript.py ${gtf} ${tfa} ${pfa}
+    #====================================
+    # step 3: build contaminant sequence
+    #====================================
+    nc_url=ftp://ftp.ensembl.org/pub/release-78/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz
+    trna_url=http://gtrnadb.ucsc.edu/download/tRNAs/eukaryotic-tRNAs.fa.gz
+    echo "downloading ncRNA from Ensembl..."
+    wget -P ${ref_dir} -N ${nc_url}
+    echo "downloading tRNA from gtrnadb..."
+    wget -P ${ref_dir} -N ${trna_url}
+    gunzip -f ${ref_dir}*.gz
+    echo "merging rRNA and tRNA..."
+    rrna_fa=${ref_dir}${nc_url##*/}
+    rrna_fa=${rrna_fa%.gz}
+    trna_fa=${ref_dir}${trna_url##*/}
+    trna_fa=${trna_fa%.gz}
+    python build_contaminant.py ${rrna_fa} ${trna_fa} Homo_sapiens ${ref_dir}human_contaminant.fa
+    echo "done preparing data for ribomap"
 fi
 #=============================
 # step 4: run ribomap
