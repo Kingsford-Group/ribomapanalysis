@@ -5,7 +5,7 @@ data_dir=${work_dir}data/
 sra_dir=${data_dir}sra/
 fasta_dir=${data_dir}fasta/
 ref_dir=${work_dir}ref/
-get_data=true
+get_data=false
 #=============================
 # urls
 #=============================

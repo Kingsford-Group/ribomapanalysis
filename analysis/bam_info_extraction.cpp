@@ -1,4 +1,5 @@
 #include <vector>
+#include <unordered_set>
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -7,6 +8,38 @@
 #include <seqan/bam_io.h>
 
 using namespace std;
+
+bool get_rc_cnt_from_bam(const char *fn)
+{
+  int tot_reads(0), tot_align(0), rc_align(0);
+  unordered_set<string> rc_reads;
+  // open bam file
+  seqan::BamStream bamIn(fn);
+  if (!isGood(bamIn)){
+    cerr << "ERROR: Could not open "<<fn<<"!"<<endl;
+    exit(1);
+  }
+  seqan::BamAlignmentRecord bam_rec;
+  while(!atEnd(bamIn)){
+    if(readRecord(bam_rec,bamIn)!=0){
+      cerr << "ERROR: Could not read bam record!\n";
+      return true;
+    }
+    // get mapped reads
+    if (not hasFlagUnmapped(bam_rec)){
+      if (not hasFlagSecondary(bam_rec)) 
+	++tot_reads;
+      if (hasFlagRC(bam_rec)) {
+	++rc_align;
+	rc_reads.emplace(string(toCString(bam_rec.qName)));
+      }
+      ++tot_align;
+    }//if(!hasFlagUnmapped(bam_rec))
+  }//while(!atEnd(bamIn))
+  cout<<"reads: total: "<<tot_reads<<" rc: "<<rc_reads.size()<<" ("<<rc_reads.size()/double(tot_reads)<<")"<<endl;
+  cout<<"alignments: total: "<<tot_align<<" rc: "<<rc_align<<" ("<<rc_align/double(tot_align)<<")"<<endl;
+  return false;
+}
 
 bool get_map_cnt_from_bam(const char *fn, vector<int>& vec)
 {
@@ -118,7 +151,7 @@ bool get_read_len_from_bam(const char *fn, vector<int>& vec)
   return false;
 }
 
-int main(int argc, char** argv)
+int readLenNmapCnt(int argc, char** argv)
 {
   if (argc!=3) {
     cout<<"Usage ./bam_info input_bam output_dir"<<endl;
@@ -152,5 +185,15 @@ int main(int argc, char** argv)
     ofile<<v<<"\t";
   ofile<<endl;
   ofile.close();
+  return 1;
+}
+
+int main(int argc, char** argv)
+{
+  if (argc!=2) {
+    cout<<"Usage ./bam_info input_bam"<<endl;
+  }
+  char* bam_fn = argv[1];
+  get_rc_cnt_from_bam(bam_fn);
   return 1;
 }
