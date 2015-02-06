@@ -12,10 +12,7 @@ def get_tot_rcnt(tid_order, profile_list):
 
 if __name__ == "__main__":
     # result_dir="../data/hela/"
-    # rmp_fname = result_dir+"GSM546920_filtered_sequence_ribomap.codon"
-    # spp_fname = result_dir+"GSM546920_filtered_sequence_starprime.codon"
-    # rms_fname = result_dir+"GSM546920_filtered_sequence_ribomap.stats"
-
+    # file_core="GSM546920_filtered_sequence"
     result_dir="../data/mouse/"
     file_core="ribo_mesc_yeslif"
     rmp_fname = result_dir+file_core+"_ribomap.codon"

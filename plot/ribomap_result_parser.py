@@ -30,6 +30,7 @@ def parse_true_profile(fname):
             tcnt = int(line.lstrip("tcnt: ").rstrip("\n"))
             transcript["tcnt"] = tcnt
         elif line.startswith("tabd: "):
+            # tabd: tabd per base X tlen
             tabd = float(line.lstrip("tabd: ").rstrip("\n"))
             transcript["tabd"] = tabd
         elif line.startswith("rprofile: "):
